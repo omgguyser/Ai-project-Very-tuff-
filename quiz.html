@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบทดสอบความถนัด — The Right Job For Right Person</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .quiz-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .quiz-section {
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-lg);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .quiz-section:last-of-type {
+    border-bottom: none;
+  }
+  .quiz-section__header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: var(--space-md);
+  }
+  .quiz-section__header h2 {
+    margin: 0;
+  }
+  .quiz-question {
+    margin-bottom: var(--space-md);
+    padding: var(--space-sm) 0;
+  }
+  .quiz-question p {
+    color: var(--color-text);
+    font-size: 0.95rem;
+    margin-bottom: 0.8rem;
+  }
+  .quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius);
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: border-color var(--transition), background var(--transition);
+  }
+  .quiz-option:hover {
+    border-color: var(--color-line-strong);
+    background: var(--color-carbon-2);
+  }
+  .quiz-option input[type="radio"] {
+    accent-color: var(--color-accent);
+  }
+  .quiz-option span {
+    font-size: 0.9rem;
+    color: var(--color-text-soft);
+  }
+  button.btn--submit {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="container navbar__inner">
+      <a href="index.html" class="navbar__logo">THE RIGHT JOB<br>FOR RIGHT PERSON</a>
+      <nav class="navbar__links">
+        <a href="index.html">หน้าแรก</a>
+        <a href="product.html">ตำแหน่งงานทั้งหมด</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section section--tight">
+    <div class="container quiz-wrap">
+      <p class="eyebrow text-center" style="display:block;">ค้นหาตัวตนของคุณ</p>
+      <h1 class="text-center" style="margin-bottom:var(--space-sm);">แบบทดสอบความถนัด</h1>
+      <p class="lede text-center" style="margin-bottom:var(--space-lg);">
+        ตอบคำถาม 20 ข้อด้านล่าง แล้วเราจะแนะนำเส้นทางอาชีพที่เหมาะกับคุณที่สุด
+      </p>
+
+      <div id="quizFormWrap">
+      <form id="quizForm">
+
+        <!-- ============ 1. Calculus (Calculate) ============ -->
+        <div class="quiz-section" data-aptitude="Calculate">
+          <div class="quiz-section__header">
+            <span class="aptitude aptitude--calculate">Calculate</span>
+            <h2>Calculus 1</h2>
+          </div>
+
+          <div class="quiz-question">
+            <p>1. อนุพันธ์ (derivative) ของ f(x) = x² คือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="calc1" value="a"><span>x</span></label>
+            <label class="quiz-option"><input type="radio" name="calc1" value="b"><span>2x</span></label>
+            <label class="quiz-option"><input type="radio" name="calc1" value="c"><span>x²</span></label>
+            <label class="quiz-option"><input type="radio" name="calc1" value="d"><span>2</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>2. ค่าลิมิตของ sin(x)/x เมื่อ x เข้าใกล้ 0 คือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="calc2" value="a"><span>0</span></label>
+            <label class="quiz-option"><input type="radio" name="calc2" value="b"><span>1</span></label>
+            <label class="quiz-option"><input type="radio" name="calc2" value="c"><span>ไม่มีค่า</span></label>
+            <label class="quiz-option"><input type="radio" name="calc2" value="d"><span>∞</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>3. ปริพันธ์ไม่จำกัดเขต (indefinite integral) ของ 2x dx คือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="calc3" value="a"><span>x + C</span></label>
+            <label class="quiz-option"><input type="radio" name="calc3" value="b"><span>2x² + C</span></label>
+            <label class="quiz-option"><input type="radio" name="calc3" value="c"><span>x² + C</span></label>
+            <label class="quiz-option"><input type="radio" name="calc3" value="d"><span>x³ + C</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>4. ถ้า f(x) = 3x³ อนุพันธ์ f'(x) คือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="calc4" value="a"><span>3x²</span></label>
+            <label class="quiz-option"><input type="radio" name="calc4" value="b"><span>6x²</span></label>
+            <label class="quiz-option"><input type="radio" name="calc4" value="c"><span>9x²</span></label>
+            <label class="quiz-option"><input type="radio" name="calc4" value="d"><span>9x³</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>5. อนุพันธ์ของ eˣ คือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="calc5" value="a"><span>x·eˣ⁻¹</span></label>
+            <label class="quiz-option"><input type="radio" name="calc5" value="b"><span>eˣ</span></label>
+            <label class="quiz-option"><input type="radio" name="calc5" value="c"><span>ln(x)</span></label>
+            <label class="quiz-option"><input type="radio" name="calc5" value="d"><span>1/x</span></label>
+          </div>
+        </div>
+
+        <!-- ============ 2. Code (Code) ============ -->
+        <div class="quiz-section" data-aptitude="Code">
+          <div class="quiz-section__header">
+            <span class="aptitude aptitude--code">Code</span>
+            <h2>Coding: C / C++ / Python</h2>
+          </div>
+
+          <div class="quiz-question">
+            <p>1. ในภาษา Python การประกาศฟังก์ชันใช้คำสั่งใด</p>
+            <label class="quiz-option"><input type="radio" name="code1" value="a"><span>func</span></label>
+            <label class="quiz-option"><input type="radio" name="code1" value="b"><span>def</span></label>
+            <label class="quiz-option"><input type="radio" name="code1" value="c"><span>function</span></label>
+            <label class="quiz-option"><input type="radio" name="code1" value="d"><span>lambda</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>2. ในภาษา C/C++ เครื่องหมายที่ใช้ปิดท้ายคำสั่งแต่ละบรรทัดคือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="code2" value="a"><span>:</span></label>
+            <label class="quiz-option"><input type="radio" name="code2" value="b"><span>.</span></label>
+            <label class="quiz-option"><input type="radio" name="code2" value="c"><span>;</span></label>
+            <label class="quiz-option"><input type="radio" name="code2" value="d"><span>,</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>3. ใน Python การสร้าง list ใช้เครื่องหมายวงเล็บชนิดใด</p>
+            <label class="quiz-option"><input type="radio" name="code3" value="a"><span>()</span></label>
+            <label class="quiz-option"><input type="radio" name="code3" value="b"><span>{}</span></label>
+            <label class="quiz-option"><input type="radio" name="code3" value="c"><span>[]</span></label>
+            <label class="quiz-option"><input type="radio" name="code3" value="d"><span>&lt;&gt;</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>4. คำสั่ง #include ใน C/C++ ใช้ทำสิ่งใด</p>
+            <label class="quiz-option"><input type="radio" name="code4" value="a"><span>ประกาศตัวแปร</span></label>
+            <label class="quiz-option"><input type="radio" name="code4" value="b"><span>เรียกใช้ไลบรารีหรือเฮดเดอร์ไฟล์</span></label>
+            <label class="quiz-option"><input type="radio" name="code4" value="c"><span>คอมไพล์โปรแกรม</span></label>
+            <label class="quiz-option"><input type="radio" name="code4" value="d"><span>วนลูป</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>5. คำสั่งใดใช้แสดงผลออกทางหน้าจอในภาษา Python</p>
+            <label class="quiz-option"><input type="radio" name="code5" value="a"><span>echo()</span></label>
+            <label class="quiz-option"><input type="radio" name="code5" value="b"><span>console.log()</span></label>
+            <label class="quiz-option"><input type="radio" name="code5" value="c"><span>print()</span></label>
+            <label class="quiz-option"><input type="radio" name="code5" value="d"><span>cout &lt;&lt;</span></label>
+          </div>
+        </div>
+
+        <!-- ============ 3. Engineering problem-solving (Act) ============ -->
+        <div class="quiz-section" data-aptitude="Act">
+          <div class="quiz-section__header">
+            <span class="aptitude aptitude--act">Act</span>
+            <h2>การแก้ไขปัญหาเชิงวิศวกรรม</h2>
+          </div>
+
+          <div class="quiz-question">
+            <p>1. เมื่อเครื่องจักรในไลน์ผลิตหยุดทำงานกะทันหัน สิ่งแรกที่ควรทำคือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="eng1" value="a"><span>หยุดเครื่องและตรวจสอบความปลอดภัยก่อนดำเนินการต่อ</span></label>
+            <label class="quiz-option"><input type="radio" name="eng1" value="b"><span>รอให้หัวหน้างานมาตัดสินใจ</span></label>
+            <label class="quiz-option"><input type="radio" name="eng1" value="c"><span>เปิดเครื่องใหม่ทันทีเพื่อให้ไลน์เดินต่อ</span></label>
+            <label class="quiz-option"><input type="radio" name="eng1" value="d"><span>ปล่อยผ่านแล้วรายงานตอนสิ้นวัน</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>2. หากพบรอยร้าวเล็กๆ บนโครงสร้างเหล็กระหว่างตรวจไซต์งาน ควรทำอย่างไร</p>
+            <label class="quiz-option"><input type="radio" name="eng2" value="a"><span>เพิกเฉยเพราะเป็นรอยร้าวเล็กน้อย</span></label>
+            <label class="quiz-option"><input type="radio" name="eng2" value="b"><span>รายงานและตรวจสอบเพิ่มเติมทันที</span></label>
+            <label class="quiz-option"><input type="radio" name="eng2" value="c"><span>ทาสีปิดรอยร้าวไว้ก่อน</span></label>
+            <label class="quiz-option"><input type="radio" name="eng2" value="d"><span>รอให้ตรวจสอบประจำปีครั้งถัดไป</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>3. หากวัสดุที่สั่งมาไม่ตรงตามสเปกที่กำหนด ควรทำสิ่งใดก่อน</p>
+            <label class="quiz-option"><input type="radio" name="eng3" value="a"><span>ใช้งานไปก่อนเพราะไม่ต่างกันมาก</span></label>
+            <label class="quiz-option"><input type="radio" name="eng3" value="b"><span>แจ้งซัพพลายเออร์และหยุดใช้งานวัสดุนั้นชั่วคราว</span></label>
+            <label class="quiz-option"><input type="radio" name="eng3" value="c"><span>โยนทิ้งโดยไม่แจ้งใคร</span></label>
+            <label class="quiz-option"><input type="radio" name="eng3" value="d"><span>ปรับแบบงานให้เข้ากับวัสดุที่ผิดสเปกแทน</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>4. ระหว่างการทดสอบระบบ พบว่าค่าที่วัดได้ผิดปกติเล็กน้อยแต่ยังอยู่ในช่วงที่ยอมรับได้ ควรทำอย่างไร</p>
+            <label class="quiz-option"><input type="radio" name="eng4" value="a"><span>บันทึกค่าไว้และเฝ้าติดตามแนวโน้มต่อเนื่อง</span></label>
+            <label class="quiz-option"><input type="radio" name="eng4" value="b"><span>ไม่บันทึกเพราะยังอยู่ในเกณฑ์</span></label>
+            <label class="quiz-option"><input type="radio" name="eng4" value="c"><span>หยุดโครงการทั้งหมดทันที</span></label>
+            <label class="quiz-option"><input type="radio" name="eng4" value="d"><span>แก้ไขค่าที่บันทึกให้ดูปกติ</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>5. เมื่อทีมงานเสนอทางแก้ปัญหาหลายวิธี สิ่งที่ควรพิจารณาเป็นอันดับแรกคือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="eng5" value="a"><span>ความปลอดภัยและความเป็นไปได้จริง</span></label>
+            <label class="quiz-option"><input type="radio" name="eng5" value="b"><span>ความคิดเห็นของคนส่วนใหญ่เพียงอย่างเดียว</span></label>
+            <label class="quiz-option"><input type="radio" name="eng5" value="c"><span>ใช้วิธีที่คุ้นเคยที่สุดโดยไม่พิจารณาอื่น</span></label>
+            <label class="quiz-option"><input type="radio" name="eng5" value="d"><span>เลือกวิธีที่เร็วที่สุดโดยไม่ดูผลกระทบ</span></label>
+          </div>
+        </div>
+
+        <!-- ============ 4. Memory (Remember) ============ -->
+        <div class="quiz-section" data-aptitude="Remember">
+          <div class="quiz-section__header">
+            <span class="aptitude aptitude--remember">Remember</span>
+            <h2>การจำ</h2>
+          </div>
+
+          <div class="quiz-question">
+            <p>1. เมืองหลวงของประเทศไทยคือข้อใด</p>
+            <label class="quiz-option"><input type="radio" name="mem1" value="a"><span>เชียงใหม่</span></label>
+            <label class="quiz-option"><input type="radio" name="mem1" value="b"><span>กรุงเทพมหานคร</span></label>
+            <label class="quiz-option"><input type="radio" name="mem1" value="c"><span>ภูเก็ต</span></label>
+            <label class="quiz-option"><input type="radio" name="mem1" value="d"><span>ขอนแก่น</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>2. ประเทศไทยเปลี่ยนแปลงการปกครองเป็นระบอบประชาธิปไตยในปี พ.ศ. ใด</p>
+            <label class="quiz-option"><input type="radio" name="mem2" value="a"><span>2455</span></label>
+            <label class="quiz-option"><input type="radio" name="mem2" value="b"><span>2475</span></label>
+            <label class="quiz-option"><input type="radio" name="mem2" value="c"><span>2500</span></label>
+            <label class="quiz-option"><input type="radio" name="mem2" value="d"><span>2540</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>3. น้ำมีสูตรเคมีว่า H₂O ซึ่งประกอบด้วยธาตุใดบ้าง</p>
+            <label class="quiz-option"><input type="radio" name="mem3" value="a"><span>ไฮโดรเจนและออกซิเจน</span></label>
+            <label class="quiz-option"><input type="radio" name="mem3" value="b"><span>ไนโตรเจนและออกซิเจน</span></label>
+            <label class="quiz-option"><input type="radio" name="mem3" value="c"><span>คาร์บอนและไฮโดรเจน</span></label>
+            <label class="quiz-option"><input type="radio" name="mem3" value="d"><span>ฮีเลียมและออกซิเจน</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>4. ดาวเคราะห์ดวงใดอยู่ใกล้ดวงอาทิตย์มากที่สุด</p>
+            <label class="quiz-option"><input type="radio" name="mem4" value="a"><span>ศุกร์</span></label>
+            <label class="quiz-option"><input type="radio" name="mem4" value="b"><span>พุธ</span></label>
+            <label class="quiz-option"><input type="radio" name="mem4" value="c"><span>โลก</span></label>
+            <label class="quiz-option"><input type="radio" name="mem4" value="d"><span>อังคาร</span></label>
+          </div>
+
+          <div class="quiz-question">
+            <p>5. หนึ่งปีมีกี่วัน (ปีปกติ ไม่ใช่ปีอธิกสุรทิน)</p>
+            <label class="quiz-option"><input type="radio" name="mem5" value="a"><span>360 วัน</span></label>
+            <label class="quiz-option"><input type="radio" name="mem5" value="b"><span>365 วัน</span></label>
+            <label class="quiz-option"><input type="radio" name="mem5" value="c"><span>366 วัน</span></label>
+            <label class="quiz-option"><input type="radio" name="mem5" value="d"><span>370 วัน</span></label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--solid btn--submit">ดูผลลัพธ์ของฉัน</button>
+
+      </form>
+      </div>
+
+      <div id="quizResult" style="display:none;"></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>&copy; 2026 The Right Job For Right Person</span>
+      <span>งานที่ใช่ สำหรับคนที่ชอบ</span>
+    </div>
+  </footer>
+
+  <script src="script.js?v=2"></script>
+</body>
+</html>
