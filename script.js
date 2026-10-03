@@ -266,6 +266,27 @@ async function handleOrderSubmit(form) {
         console.warn("Google Sheet save failed:", e);
       }
     }
+         // Telegram alert through mini-pos (a failure here doesn't affect the application)
+    if (MINI_POS_URL.startsWith("http")) {
+      try {
+        await fetch(`${MINI_POS_URL}/api/telegram`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: product.name,
+            quantity: 1,
+            total: Number(product.price),
+            stockLeft: product.stock - 1,
+            unit: "ตำแหน่ง",
+            customer: getValue("customerName"),
+            contact: getValue("contact"),
+            note: getValue("note"),
+          }),
+        });
+      } catch (e) {
+        console.warn("Telegram alert failed:", e);
+      }
+    }
     window.location.href = "thankyou.html";
   } catch (error) {
     console.error(error);
