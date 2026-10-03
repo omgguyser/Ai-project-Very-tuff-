@@ -106,6 +106,15 @@
   @media (max-width: 560px) {
     .about__grid { grid-template-columns: 1fr; }
   }
+
+  /* ปุ่มลอยมุมซ้ายล่าง: ไปทำแบบทดสอบ */
+  .quiz-fab {
+    position: fixed;
+    bottom: var(--space-sm);
+    left: var(--space-sm);
+    z-index: 999;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
 </style>
 </head>
 <body>
@@ -237,6 +246,9 @@
       <span>งานที่ใช่ สำหรับคนที่ชอบ</span>
     </div>
   </footer>
+
+  <!-- ปุ่มไปทำแบบทดสอบ (มุมซ้ายล่าง) -->
+  <a href="quiz.html" class="btn btn--solid quiz-fab">Test your skill</a>
 
   <script>
     // เปิด/ปิดหน้าต่าง About me
