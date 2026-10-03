@@ -7,7 +7,7 @@
 const SUPABASE_URL = "https://oipujbpvoddemtjafgiq.supabase.co"; // URL โปรเจกต์ Supabase ของ mini-pos
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcHVqYnB2b2RkZW10amFmZ2lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4OTY5NTAsImV4cCI6MjEwNjQ3Mjk1MH0.DAtTsbE9AE-50su62RdbZoiXubuZjGuEjrRP2__tDJE";                // anon public key (Supabase > Project Settings > API)
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxrcRL0XpvGN6Ef5E7NrZrYzkoBfAHS2aLJA9oO3nlN1j3fi7vcjwWzvhw_eRo9NJMvEw/exec";
-const MINI_POS_URL = "https://mini-1kj2s9530-gooner-jordan.vercel.app"; // mini-pos address (for Telegram alerts)
+const MINI_POS_URL = "https://mini-pos-omega-mauve.vercel.app";
 const CSV_URL = "https://script.google.com/macros/s/AKfycbxrcRL0XpvGN6Ef5E7NrZrYzkoBfAHS2aLJA9oO3nlN1j3fi7vcjwWzvhw_eRo9NJMvEw/exec";                 // URL ของ Google Sheet ที่ Publish เป็น CSV (สำหรับหน้า admin)
 const PRODUCTS_JSON_URL = "products.json";
  
