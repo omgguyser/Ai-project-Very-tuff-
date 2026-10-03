@@ -246,7 +246,24 @@ async function handleOrderSubmit(form) {
       });
       throw new Error("บันทึกการสมัครไม่สำเร็จ");
     }
- 
+     // Copy the application to Google Sheet (a failure here doesn't affect the application)
+    if (APPS_SCRIPT_URL.startsWith("http")) {
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify({
+            customerName: getValue("customerName"),
+            contact: getValue("contact"),
+            items: getValue("items"),
+            total: getValue("total"),
+            note: getValue("note"),
+          }),
+        });
+      } catch (e) {
+        console.warn("Google Sheet save failed:", e);
+      }
+    }
     window.location.href = "thankyou.html";
   } catch (error) {
     console.error(error);
