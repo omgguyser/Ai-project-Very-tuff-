@@ -40,6 +40,72 @@
   .contact-strip a.contact-strip__item:hover {
     color: var(--color-accent);
   }
+  /* ปุ่ม About me + หน้าต่างข้อมูล */
+  .contact-strip__btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-line-strong);
+    transition: color var(--transition);
+  }
+  .contact-strip__btn:hover { color: var(--color-accent); }
+
+  .about {
+    width: min(640px, calc(100vw - 2rem));
+    padding: 0;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius);
+    background: var(--color-carbon);
+    color: var(--color-text);
+  }
+  .about::backdrop { background: rgba(0, 0, 0, 0.7); }
+  .about__inner { padding: var(--space-md); }
+  .about__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+  }
+  .about__head h3 { margin: 0; }
+  .about__close {
+    background: none;
+    border: none;
+    color: var(--color-text-soft);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .about__close:hover { color: var(--color-accent); }
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+  }
+  .about__col { border-top: 1px solid var(--color-line); padding-top: var(--space-sm); }
+  .about__role {
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    margin-bottom: var(--space-xs);
+  }
+  .about dl { margin: 0; }
+  .about dt {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-faint);
+    margin-top: var(--space-xs);
+  }
+  .about dd { margin: 0; color: var(--color-text); overflow-wrap: anywhere; }
+  .about dd a:hover { color: var(--color-accent); }
+  @media (max-width: 560px) {
+    .about__grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -49,9 +115,38 @@
     <div class="container contact-strip__inner">
       <img class="contact-strip__avatar" src="images/profile.jpg" alt="omgguyser" onerror="this.style.visibility='hidden'">
       <span class="contact-strip__item"><span>Discord</span>omgguyser</span>
+      <button type="button" class="contact-strip__item contact-strip__btn" id="aboutBtn">About me</button>
       <a class="contact-strip__item" href="https://www.instagram.com/omgguyser/" target="_blank" rel="noopener noreferrer"><span>IG</span>omgguyser</a>
     </div>
   </div>
+
+  <!-- ============ ABOUT ME (popup) ============ -->
+  <dialog class="about" id="aboutDialog">
+    <div class="about__inner">
+      <div class="about__head">
+        <h3>About me</h3>
+        <button type="button" class="about__close" id="aboutClose" aria-label="ปิด">&times;</button>
+      </div>
+      <div class="about__grid">
+        <div class="about__col">
+          <p class="about__role">Me</p>
+          <dl>
+            <dt>Name</dt><dd>Peeradon Kaewkaemkhae</dd>
+            <dt>Student ID</dt><dd>6904033617052</dd>
+            <dt>IG</dt><dd><a href="https://www.instagram.com/omgguyser/" target="_blank" rel="noopener noreferrer">omgguyser</a></dd>
+          </dl>
+        </div>
+        <div class="about__col">
+          <p class="about__role">Partner</p>
+          <dl>
+            <dt>Partner name</dt><dd>Anurak Thaiyang</dd>
+            <dt>Student ID</dt><dd>690</dd>
+            <dt>IG</dt><dd><a href="https://www.instagram.com/qilay_io/" target="_blank" rel="noopener noreferrer">qilay_io</a></dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </dialog>
 
   <header class="navbar">
     <div class="container navbar__inner">
@@ -143,6 +238,15 @@
     </div>
   </footer>
 
-  <script src="script.js?v=3"></script>
+  <script>
+    // เปิด/ปิดหน้าต่าง About me
+    (function () {
+      var d = document.getElementById("aboutDialog");
+      document.getElementById("aboutBtn").addEventListener("click", function () { d.showModal(); });
+      document.getElementById("aboutClose").addEventListener("click", function () { d.close(); });
+      d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+    })();
+  </script>
+  <script src="script.js?v=2"></script>
 </body>
 </html>
