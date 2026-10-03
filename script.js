@@ -2,12 +2,13 @@
    The Right Job For Right Person — Shared Script
    ใช้ร่วมกันทุกหน้า: product.html / order.html / admin.html
    ========================================================== */
-
+ 
 // ----- ตั้งค่าตรงนี้ -----
-const APPS_SCRIPT_URL = "[APPS_SCRIPT_URL]"; // URL ของ Google Apps Script Web App (POST รับออเดอร์)
+const SUPABASE_URL = "https://owacbqpzxtwwftbonurd.supabase.co"; // URL โปรเจกต์ Supabase ของ mini-pos
+const SUPABASE_ANON_KEY = "[SUPABASE_ANON_KEY]";                // anon public key (Supabase > Project Settings > API)
 const CSV_URL = "[CSV_URL]";                 // URL ของ Google Sheet ที่ Publish เป็น CSV (สำหรับหน้า admin)
 const PRODUCTS_JSON_URL = "products.json";
-
+ 
 // รายการตัวกรองตาม Aptitude
 const APTITUDE_FILTERS = [
   { label: "ทั้งหมด", value: "all" },
@@ -16,7 +17,7 @@ const APTITUDE_FILTERS = [
   { label: "Code", value: "Code" },
   { label: "Act", value: "Act" },
 ];
-
+ 
 document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("product-list")) {
     initProductPage();
@@ -30,17 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("quizForm")) {
     initQuizPage();
   }
-
+ 
   initFloatingApplicationButton();
 });
-
+ 
 /* ==========================================================
    1) product.html — แสดงรายการงาน + ตัวกรอง Aptitude
    ========================================================== */
 function initProductPage() {
   const listEl = document.getElementById("product-list");
   const filterBarEl = document.getElementById("filter-bar");
-
+ 
   fetch(PRODUCTS_JSON_URL)
     .then((res) => {
       if (!res.ok) throw new Error("โหลด products.json ไม่สำเร็จ");
@@ -49,11 +50,11 @@ function initProductPage() {
     .then((products) => {
       const urlParams = new URLSearchParams(window.location.search);
       const initialFilter = urlParams.get("Aptitude") || "all";
-
+ 
       renderFilterBar(filterBarEl, initialFilter, (selected) => {
         renderProductList(listEl, products, selected);
       });
-
+ 
       renderProductList(listEl, products, initialFilter);
     })
     .catch((err) => {
@@ -62,22 +63,22 @@ function initProductPage() {
         '<p class="text-center">ไม่สามารถโหลดรายการงานได้ในขณะนี้</p>';
     });
 }
-
+ 
 function renderFilterBar(filterBarEl, activeValue, onChange) {
   if (!filterBarEl) return;
   filterBarEl.innerHTML = "";
-
+ 
   APTITUDE_FILTERS.forEach((filter) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "btn filter-btn";
     btn.textContent = filter.label;
     btn.dataset.value = filter.value;
-
+ 
     if (filter.value === activeValue) {
       btn.classList.add("filter-btn--active");
     }
-
+ 
     btn.addEventListener("click", () => {
       filterBarEl
         .querySelectorAll(".filter-btn")
@@ -85,31 +86,31 @@ function renderFilterBar(filterBarEl, activeValue, onChange) {
       btn.classList.add("filter-btn--active");
       onChange(filter.value);
     });
-
+ 
     filterBarEl.appendChild(btn);
   });
 }
-
+ 
 function renderProductList(listEl, products, filterValue) {
   if (!listEl) return;
-
+ 
   const filtered =
     filterValue === "all"
       ? products
       : products.filter((p) => p.Aptitude === filterValue);
-
+ 
   if (filtered.length === 0) {
     listEl.innerHTML = '<p class="text-center">ไม่พบรายการงานในหมวดนี้</p>';
     return;
   }
-
+ 
   listEl.innerHTML = filtered
     .map((product) => {
       const jobName = `${product.name}(${product.type} - ${product.Aptitude})`;
       const orderUrl = `order.html?job=${encodeURIComponent(
         jobName
-      )}&price=${encodeURIComponent(product.price)}`;
-
+      )}&price=${encodeURIComponent(product.price)}&sku=${encodeURIComponent(product.sku || "")}`;
+ 
       return `
         <article class="card">
           <div class="card__image-wrap">
@@ -134,7 +135,7 @@ function renderProductList(listEl, products, filterValue) {
     })
     .join("");
 }
-
+ 
 /* ==========================================================
    2) order.html — ฟอร์มสั่งซื้อ / สมัคร
    ========================================================== */
@@ -142,11 +143,11 @@ function initOrderPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const job = urlParams.get("job") || "";
   const price = urlParams.get("price") || "";
-
+ 
   const jobEl = document.getElementById("job");
   const totalEl = document.getElementById("total");
   const itemsEl = document.getElementById("items");
-
+ 
   // เติมชื่องานลงช่อง job (ถ้ามี element นี้ในหน้า)
   // รองรับทั้งกรณีเป็น <input>/<textarea> (ใช้ .value) และ <span>/<div> อื่นๆ (ใช้ textContent)
   if (jobEl) {
@@ -157,65 +158,109 @@ function initOrderPage() {
       jobEl.textContent = job || "—";
     }
   }
-
+ 
   // เติมชื่องานลงช่อง items ด้วย (ใช้เป็นค่าที่จะถูกส่งไปเป็น payload.items)
   if (itemsEl) {
     itemsEl.value = job;
   }
-
+ 
   // สำคัญ: ต้องเติมราคาลงช่อง total เสมอ ห้ามเว้นว่าง
   if (totalEl) {
     totalEl.value = price;
   }
-
+ 
   const form = document.getElementById("orderForm");
+  form.dataset.sku = urlParams.get("sku") || "";
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     handleOrderSubmit(form);
   });
 }
-
-function handleOrderSubmit(form) {
+ 
+async function handleOrderSubmit(form) {
   const getValue = (id) => {
     const el = document.getElementById(id);
-    return el ? el.value : "";
+    return el ? el.value.trim() : "";
   };
-
-  const payload = {
-    customerName: getValue("customerName"),
-    contact: getValue("contact"),
-    items: getValue("items"),
-    total: getValue("total"),
-    note: getValue("note"),
-  };
-
+ 
   const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
-  if (submitBtn) {
-    submitBtn.disabled = true;
-  }
-
-  fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify(payload),
-  })
-    .then(() => {
-      window.location.href = "thankyou.html";
-    })
-    .catch((error) => {
-      console.error(error);
-      alert("เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
-      if (submitBtn) {
-        submitBtn.disabled = false;
+  if (submitBtn) submitBtn.disabled = true;
+ 
+  const headers = {
+    apikey: SUPABASE_ANON_KEY,
+    Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    "Content-Type": "application/json",
+  };
+  const rest = `${SUPABASE_URL}/rest/v1`;
+ 
+  try {
+    const sku = form.dataset.sku;
+    if (!sku) throw new Error("ไม่พบรหัสตำแหน่งงาน กรุณาเลือกตำแหน่งจากหน้าตำแหน่งงานอีกครั้ง");
+ 
+    // 1) หาสินค้าใน mini-pos จาก SKU
+    const pRes = await fetch(
+      `${rest}/products?sku=eq.${encodeURIComponent(sku)}&select=id,name,price,stock`,
+      { headers }
+    );
+    if (!pRes.ok) throw new Error("โหลดข้อมูลตำแหน่งงานไม่สำเร็จ");
+    const [product] = await pRes.json();
+    if (!product) throw new Error("ไม่พบตำแหน่งงานนี้ในระบบ");
+    if (product.stock < 1) {
+      alert("ขออภัย ตำแหน่งนี้เต็มแล้ว");
+      if (submitBtn) submitBtn.disabled = false;
+      return;
+    }
+ 
+    // 2) หักสต็อก 1 (เงื่อนไข stock=ค่าเดิม กันคนสมัครชนกัน)
+    const sRes = await fetch(
+      `${rest}/products?id=eq.${product.id}&stock=eq.${product.stock}`,
+      {
+        method: "PATCH",
+        headers: { ...headers, Prefer: "return=representation" },
+        body: JSON.stringify({ stock: product.stock - 1 }),
       }
+    );
+    const updated = sRes.ok ? await sRes.json() : [];
+    if (updated.length === 0) throw new Error("มีผู้สมัครพร้อมกัน กรุณากดสมัครอีกครั้ง");
+ 
+    // 3) บันทึกรายการลงตาราง sales (จะไปโผล่ที่หน้า /history ของ mini-pos)
+    const saleRes = await fetch(`${rest}/sales`, {
+      method: "POST",
+      headers: { ...headers, Prefer: "return=minimal" },
+      body: JSON.stringify({
+        product_id: product.id,
+        product_name: product.name,
+        quantity: 1,
+        total_price: Number(product.price),
+        customer_name: getValue("customerName"),
+        contact: getValue("contact"),
+        note: getValue("note"),
+      }),
     });
+    if (!saleRes.ok) {
+      // บันทึกไม่สำเร็จ: คืนสต็อกกลับ
+      await fetch(`${rest}/products?id=eq.${product.id}`, {
+        method: "PATCH",
+        headers,
+        body: JSON.stringify({ stock: product.stock }),
+      });
+      throw new Error("บันทึกการสมัครไม่สำเร็จ");
+    }
+ 
+    window.location.href = "thankyou.html";
+  } catch (error) {
+    console.error(error);
+    alert(error.message || "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+    if (submitBtn) submitBtn.disabled = false;
+  }
 }
-
+ 
 /* ==========================================================
    3) admin.html — ตารางออเดอร์จาก Google Sheet (CSV)
    ========================================================== */
 function initAdminPage() {
   const tbody = document.querySelector("#ordersTable tbody");
-
+ 
   fetch(CSV_URL)
     .then((res) => {
       if (!res.ok) throw new Error("โหลดข้อมูลออเดอร์ไม่สำเร็จ");
@@ -227,10 +272,10 @@ function initAdminPage() {
         tbody.innerHTML = '<tr><td colspan="6">ยังไม่มีรายการสั่งซื้อ</td></tr>';
         return;
       }
-
+ 
       // แถวแรกคือ header ตัดออก
       const dataRows = rows.slice(1).filter((r) => r.some((cell) => cell !== ""));
-
+ 
       // เรียงล่าสุดขึ้นก่อน โดยอิงคอลัมน์แรก (วันเวลา) ถ้า parse เป็นวันที่ได้
       dataRows.sort((a, b) => {
         const dateA = new Date(a[0]);
@@ -244,7 +289,7 @@ function initAdminPage() {
         // ถ้า parse วันที่ไม่ได้เลย ให้กลับลำดับแถวแทน (ล่าสุดมักอยู่ท้ายชีท)
         dataRows.reverse();
       }
-
+ 
       tbody.innerHTML = dataRows
         .map((row) => {
           const [timestamp, customerName, contact, items, total, note] = row;
@@ -267,21 +312,21 @@ function initAdminPage() {
         '<tr><td colspan="6">ไม่สามารถโหลดข้อมูลออเดอร์ได้ในขณะนี้</td></tr>';
     });
 }
-
+ 
 // CSV parser แบบง่าย รองรับ field ที่ครอบด้วย double quote และ comma/newline ภายใน quote
 function parseCSV(text) {
   const rows = [];
   let row = [];
   let field = "";
   let inQuotes = false;
-
+ 
   // normalize line endings
   const normalized = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-
+ 
   for (let i = 0; i < normalized.length; i++) {
     const char = normalized[i];
     const nextChar = normalized[i + 1];
-
+ 
     if (inQuotes) {
       if (char === '"' && nextChar === '"') {
         field += '"';
@@ -307,20 +352,20 @@ function parseCSV(text) {
       }
     }
   }
-
+ 
   // แถวสุดท้ายที่ไม่มี newline ปิดท้าย
   if (field.length > 0 || row.length > 0) {
     row.push(field);
     rows.push(row);
   }
-
+ 
   return rows.filter((r) => !(r.length === 1 && r[0] === ""));
 }
-
+ 
 /* ==========================================================
    4) quiz.html — แบบทดสอบความถนัด (Calculate / Code / Act / Remember)
    ========================================================== */
-
+ 
 // เฉลยคำตอบที่ถูกต้องของแต่ละคำถาม (ชื่อ input -> ค่าที่ถูก)
 const QUIZ_ANSWER_KEY = {
   // Calculus 1 -> Calculate
@@ -348,7 +393,7 @@ const QUIZ_ANSWER_KEY = {
   mem4: "b",
   mem5: "b",
 };
-
+ 
 // ชื่อ prefix ของคำถามแต่ละหมวด -> ค่า Aptitude ที่ใช้กรองใน product.html
 const QUIZ_PREFIX_TO_APTITUDE = {
   calc: "Calculate",
@@ -356,35 +401,35 @@ const QUIZ_PREFIX_TO_APTITUDE = {
   eng: "Act",
   mem: "Remember",
 };
-
+ 
 function initQuizPage() {
   const form = document.getElementById("quizForm");
-
+ 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     handleQuizSubmit(form);
   });
 }
-
+ 
 function handleQuizSubmit(form) {
   // นับคะแนนถูกของแต่ละหมวด โดยดูจาก prefix ของชื่อคำถาม (calc/code/eng/mem)
   const scores = { Calculate: 0, Code: 0, Act: 0, Remember: 0 };
-
+ 
   Object.keys(QUIZ_ANSWER_KEY).forEach((questionName) => {
     const selected = form.querySelector(
       `input[name="${questionName}"]:checked`
     );
     if (!selected) return;
-
+ 
     const prefix = questionName.replace(/[0-9]+$/, "");
     const aptitude = QUIZ_PREFIX_TO_APTITUDE[prefix];
     if (!aptitude) return;
-
+ 
     if (selected.value === QUIZ_ANSWER_KEY[questionName]) {
       scores[aptitude] += 1;
     }
   });
-
+ 
   // หาหมวดที่ได้คะแนนสูงสุด (ถ้าคะแนนเท่ากันหลายหมวด จะเลือกหมวดแรกที่เจอ)
   let topAptitude = "Calculate";
   let topScore = -1;
@@ -394,23 +439,23 @@ function handleQuizSubmit(form) {
       topAptitude = aptitude;
     }
   });
-
+ 
   // แสดงผลลัพธ์แบบทดสอบ พร้อมแนะนำงาน 1-2 ตำแหน่งที่เหมาะสมที่สุด (ไม่บล็อกงานอื่น)
   showQuizResult(topAptitude);
 }
-
+ 
 function showQuizResult(aptitude) {
   const formWrap = document.getElementById("quizFormWrap");
   const resultEl = document.getElementById("quizResult");
   if (!resultEl) return;
-
+ 
   if (formWrap) {
     formWrap.style.display = "none";
   }
   resultEl.style.display = "block";
   resultEl.innerHTML = '<p class="text-center">กำลังประมวลผล...</p>';
   resultEl.scrollIntoView({ behavior: "smooth", block: "start" });
-
+ 
   fetch(PRODUCTS_JSON_URL)
     .then((res) => {
       if (!res.ok) throw new Error("โหลด products.json ไม่สำเร็จ");
@@ -427,36 +472,36 @@ function showQuizResult(aptitude) {
         '<p class="text-center">ไม่สามารถโหลดคำแนะนำได้ในขณะนี้ ลองดูตำแหน่งงานทั้งหมดแทนได้ที่ <a href="product.html">หน้าตำแหน่งงาน</a></p>';
     });
 }
-
+ 
 // เลือกงานแนะนำ 1-2 ตำแหน่ง: พยายามหาให้ได้ทั้งสาย Build และ Research อย่างละ 1 ถ้ามี
 function pickRecommendedJobs(matches) {
   const buildJob = matches.find((p) => p.type === "Build");
   const researchJob = matches.find((p) => p.type === "Research");
-
+ 
   const picks = [];
   if (buildJob) picks.push(buildJob);
   if (researchJob && researchJob.id !== (buildJob && buildJob.id)) {
     picks.push(researchJob);
   }
-
+ 
   matches.forEach((p) => {
     if (picks.length >= 2) return;
     if (!picks.some((picked) => picked.id === p.id)) {
       picks.push(p);
     }
   });
-
+ 
   return picks.slice(0, 2);
 }
-
+ 
 function renderQuizResult(resultEl, aptitude, recommended) {
   const cardsHtml = recommended
     .map((product) => {
       const jobName = `${product.name}(${product.type} - ${product.Aptitude})`;
       const orderUrl = `order.html?job=${encodeURIComponent(
         jobName
-      )}&price=${encodeURIComponent(product.price)}`;
-
+      )}&price=${encodeURIComponent(product.price)}&sku=${encodeURIComponent(product.sku || "")}`;
+ 
       return `
         <article class="card">
           <div class="card__image-wrap">
@@ -480,7 +525,7 @@ function renderQuizResult(resultEl, aptitude, recommended) {
       `;
     })
     .join("");
-
+ 
   resultEl.innerHTML = `
     <p class="eyebrow text-center" style="display:block;">ผลการวิเคราะห์ของคุณ</p>
     <h2 class="text-center" style="margin-bottom:var(--space-sm);">
@@ -502,24 +547,24 @@ function renderQuizResult(resultEl, aptitude, recommended) {
     </div>
   `;
 }
-
+ 
 /* ==========================================================
    5) ปุ่มลอย "Application" มุมขวาล่าง — เปิดลิงก์ YouTube ในแท็บใหม่
    ========================================================== */
 function initFloatingApplicationButton() {
   // กันไม่ให้สร้างซ้ำถ้ามีอยู่แล้ว
   if (document.querySelector(".floating-apply-btn")) return;
-
+ 
   const btn = document.createElement("a");
   btn.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
   btn.target = "_blank";
   btn.rel = "noopener noreferrer";
   btn.textContent = "Application";
   btn.className = "btn btn--solid floating-apply-btn";
-
+ 
   document.body.appendChild(btn);
 }
-
+ 
 /* ==========================================================
    Utilities
    ========================================================== */
@@ -531,7 +576,7 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
-
+ 
 function formatNumber(num) {
   const n = Number(num);
   if (isNaN(n)) return `${num} บาท`;
