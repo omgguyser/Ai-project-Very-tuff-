@@ -4,7 +4,7 @@
    ========================================================== */
  
 // ----- ตั้งค่าตรงนี้ -----
-const SUPABASE_URL = "https://owacbqpzxtwwftbonurd.supabase.co"; // URL โปรเจกต์ Supabase ของ mini-pos
+const SUPABASE_URL = "https://oipujbpvoddemtjafgiq.supabase.co"; // URL โปรเจกต์ Supabase ของ mini-pos
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcHVqYnB2b2RkZW10amFmZ2lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4OTY5NTAsImV4cCI6MjEwNjQ3Mjk1MH0.DAtTsbE9AE-50su62RdbZoiXubuZjGuEjrRP2__tDJE";                // anon public key (Supabase > Project Settings > API)
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLqNKCMMDRz-DTuS3RIAJPFGhuM9exp-mwrxUGmeu2DHWNtn-DENs69P35emMine0qOCA8iaWAC7ZS/pub?gid=0&single=true&output=csv";                 // URL ของ Google Sheet ที่ Publish เป็น CSV (สำหรับหน้า admin)
 const PRODUCTS_JSON_URL = "products.json";
